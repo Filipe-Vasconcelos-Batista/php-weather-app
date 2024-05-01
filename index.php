@@ -17,7 +17,6 @@
     <div class="col-auto d">
         <button type="submit" class="btn btn-primary mb-3">Submit</button>
     </div>
-
 </form>
 </div>
 <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
