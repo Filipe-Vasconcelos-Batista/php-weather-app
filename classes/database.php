@@ -64,7 +64,7 @@ class Database{
         echo "Error: " . $e->getMessage();
     }
 }
-    public function incrementSearchCountById($cityId){
+    public function updateCity($cityId){
         try{
             $stmt = $this->conn->prepare("UPDATE searchTable SET times_searched = times_searched + 1 WHERE id = :cityId");
             $stmt->execute(['cityId' => $cityId]);
