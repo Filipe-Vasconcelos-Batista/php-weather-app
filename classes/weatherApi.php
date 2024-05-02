@@ -3,7 +3,7 @@ class weatherApi {
     public $apiKey;
     private $apiUrl = 'http://api.openweathermap.org/data/2.5/weather?q=';
     public function __construct($apiKey) {
-        $this->apiKey = $apiKey;
+        $this->apiKey = getenv('API_Key');
     }
     public function getWeather($city) {
         $url=$this->apiUrl . urlencode($city) . '&appid=' . $this->apiKey . '&units=metric';
