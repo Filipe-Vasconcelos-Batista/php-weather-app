@@ -3,11 +3,11 @@ class weatherApi {
     public $apiKey;
     private $apiUrl = 'http://api.openweathermap.org/data/2.5/weather?q=';
     public function __construct($apiKey) {
-        $this->apiKey = getenv('API_Key');
+        $this->apiKey = $apiKey;
     }
     public function getWeather($city) {
         $url=$this->apiUrl . urlencode($city) . '&appid=' . $this->apiKey . '&units=metric';
-        $weather=file_get_contents($url);
+        $weather=@file_get_contents($url);
         if ($weather === FALSE) {
             return "City does not exist";
         }
