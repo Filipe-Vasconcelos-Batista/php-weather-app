@@ -12,11 +12,12 @@ class Database{
         $this->db_name = getenv("DB_NAME");
         $this->username = getenv("DB_USER");
         $this->password = getenv("DB_PASS");
+        $this->connect();
     }
     public function connect(){
         $this->conn = null;
         try{
-            $dsn= "mysql:host?$this->>host;dbname?=$this->>db_name;charset=$this->>charset";
+            $dsn = "mysql:host=$this->host;dbname=$this->db_name;charset=$this->charset";
             $opt=[
                 PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC,
@@ -42,6 +43,7 @@ class Database{
         }
     }
     public function searchCity($cityName){
+        $this->createTable();
         try{
             $stmt=$this->conn->prepare("SELECT * FROM searchTable WHERE name=:$cityName");
             $stmt->execute(['cityName=$cityName']);
