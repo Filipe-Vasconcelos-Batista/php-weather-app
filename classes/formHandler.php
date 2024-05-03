@@ -10,6 +10,19 @@ class FormHandler {
             echo "City name is required.";
             return;
         }
+        $newCityName=$this->formTransformation($cityName);
+
+
+
+    }
+    public function formTransformation($cityName){
+        $trimmedCityName = trim($cityName);
+
+        $cleanCityName = preg_replace("/[^a-zA-Z0-9\s]/", "", $trimmedCityName);
+
+        return ucwords(strtolower($cleanCityName));
+    }
+    public function handleCitySearchData($cityName){
         $cityId= $this -> database ->searchCity($cityName);
         if($cityId===false){
             $this->database -> addCity($cityName);
