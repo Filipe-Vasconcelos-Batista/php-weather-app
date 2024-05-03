@@ -37,7 +37,6 @@ class Database{
                 times_searched INT(6) NOT NULL
             )";
             $this->conn->exec($sql);
-            echo "Table searchTable created successfully";
         } catch(PDOException $e){
             echo $sql . "<br>" . $e->getMessage();
         }
@@ -45,10 +44,10 @@ class Database{
     public function searchCity($cityName){
         $this->createTable();
         try{
-            $stmt=$this->conn->prepare("SELECT * FROM searchTable WHERE name=:$cityName");
-            $stmt->execute(['cityName=$cityName']);
-            $result=$stmt->fetchColumn();;
-            if($result !==false){
+            $stmt=$this->conn->prepare("SELECT * FROM searchTable WHERE name=:cityName");
+            $stmt->execute(['cityName'=> $cityName]);
+            $result=$stmt->fetch();
+            if(!empty($result)){
                 return $result;
             }else{
                 return false;
@@ -60,8 +59,6 @@ class Database{
     try{
         $stmt = $this->conn->prepare("INSERT INTO searchTable (name, times_searched) VALUES (:cityName, 1)");
         $stmt->execute(['cityName' => $cityName]);
-
-        echo "City: " . $cityName . " added successfully with 1 search count.";
     } catch(PDOException $e){
         echo "Error: " . $e->getMessage();
     }
@@ -70,8 +67,6 @@ class Database{
         try{
             $stmt = $this->conn->prepare("UPDATE searchTable SET times_searched = times_searched + 1 WHERE id = :cityId");
             $stmt->execute(['cityId' => $cityId]);
-
-            echo "Search count incremented for city with ID: " . $cityId;
         } catch(PDOException $e){
             echo "Error: " . $e->getMessage();
         }
@@ -80,8 +75,8 @@ class Database{
         try{
             $stmt = $this->conn->prepare("SELECT * FROM searchTable");
             $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $result;
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         } catch(PDOException $e){
             echo $e->getMessage();
         }
@@ -91,8 +86,7 @@ class Database{
         try{
             $stmt = $this->conn->prepare("SELECT * FROM searchTable ORDER BY times_searched DESC LIMIT 10");
             $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $result;
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch(PDOException $e){
             echo $e->getMessage();
         }
