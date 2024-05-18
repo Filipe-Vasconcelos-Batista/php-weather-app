@@ -1,0 +1,16 @@
+{
+  "require": {
+    "ramsey/uuid": "^4.7"
+  },
+  "scripts": {
+    "weather": "php src/weatherCommandLine.php"
+  },
+  "autoload": {
+    "psr-4": {
+      "Classes\\": "src/classes/"
+    }
+  },
+  "bin": [
+    "src/index.php"
+  ]
+}
