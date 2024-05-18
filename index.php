@@ -1,62 +1,73 @@
+#!/usr/bin/env php
 <?php
-require_once 'classes/formHandler.php';
-require_once 'classes/userSession.php';
-require_once 'classes/weatherApi.php';
-require_once 'classes/database.php';
 
-$userSession = new UserSession();
+require __DIR__ . "/vendor/autoload.php";
+
+if (isset($argv[1])) {
+    $cityName = $argv[1];
+    $database = new Classes\Database();
+    $formHandler = new Classes\FormHandler($database);
+    $weatherApi = new Classes\WeatherApi(getenv('API_KEY'));
+    $cityName = $formHandler->formTransformation($cityName);
+    $weatherData = $weatherApi->getWeather($cityName);
+    echo "Temperature in {$cityName} is :{$weatherData['main']['temp']}ºC, the humidity is: {$weatherData['main']['humidity']}%  and the wind speed is: {$weatherData['wind']['speed']} ";
+}
+/* this one for the html app
+$userSession = new Classes\UserSession();
+
 $lastSearched = $userSession->getLastSearchedCity();
-$database = new Database();
+$database = new Classes\Database();
 $topSearched = $database->getTop10Cities();
 $weatherData = null;
 $cityName = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-if (isset($_POST['clear_session']) && $_POST['clear_session'] == 1) {
-    $userSession->clear();
-    $weatherData = null;
-    $cityName = null;
-    $lastSearched = null;}
-    else{
-    $cityName = $_POST['city'];
-    $userSession->setLastSearchedCity($cityName);
-    $lastSearched = $userSession->getLastSearchedCity();
-    $lastSearched = $cityName;
-    $formHandler = new FormHandler($database);
-    $weatherApi = new WeatherApi(getenv('API_KEY'));
-    $cityName = $formHandler->formTransformation($cityName);
-
-    $weatherData = $weatherApi->getWeather($cityName);
-
-    if (is_array($weatherData)) {
+    if (isset($_POST['clear_session']) && $_POST['clear_session'] == 1) {
+        $userSession->clear();
+        $weatherData = null;
+        $cityName = null;
+        $lastSearched = null;
+    } else {
+        $cityName = $_POST['city'];
         $userSession->setLastSearchedCity($cityName);
-        $userSession->incrementSearchCount();
-        $formHandler->handleCitySearchData($cityName);
+        $lastSearched = $userSession->getLastSearchedCity();
+        $lastSearched = $cityName;
+        $formHandler = new Classes\FormHandler($database);
+        $weatherApi = new Classes\WeatherApi(getenv('API_KEY'));
+        $cityName = $formHandler->formTransformation($cityName);
+
+        $weatherData = $weatherApi->getWeather($cityName);
+
+        if (is_array($weatherData)) {
+            $userSession->setLastSearchedCity($cityName);
+            $userSession->incrementSearchCount();
+            $formHandler->handleCitySearchData($cityName);
+        }
     }
-}
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>
-    Weather Reporto
-</title>
+    <title>
+        Weather Reporto
+    </title>
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container d-flex justify-content-center mt-2">
-<form class="row g-2" method="post" action="index.php">
-<div class="col-auto ">
-    <input type="text" name="city"class="form-control" id="exampleFormControlInput1" placeholder="Choose your city"
-           value="<?php if($lastSearched) {
-               echo htmlspecialchars($lastSearched);
-           } ?>">
-</div>
-    <div class="col-auto d">
-        <button type="submit" class="btn btn-primary mb-3">Submit</button>
-    </div>
-</form>
+    <form class="row g-2" method="post" action="index.php">
+        <div class="col-auto ">
+            <input type="text" name="city" class="form-control" id="exampleFormControlInput1"
+                   placeholder="Choose your city"
+                   value="<?php if ($lastSearched) {
+                       echo htmlspecialchars($lastSearched);
+                   } ?>">
+        </div>
+        <div class="col-auto d">
+            <button type="submit" class="btn btn-primary mb-3">Submit</button>
+        </div>
+    </form>
 </div>
 <?php
 echo "<div class='container d-flex justify-content-center mt-2'>";
@@ -75,12 +86,12 @@ if (is_array($weatherData)) {
 echo "</div>";
 
 echo "<div class='container d-flex justify-content-center mt-2'>";
-if(is_array($topSearched)){
+if (is_array($topSearched)) {
     echo "<table class='table'>";
     echo "<thead><tr><th colspan='2'>Top Searched Locations</th></tr></thead>";
     echo "<tbody>";
     echo "<tr><td>City</td><td>nº of searches</td></tr>";
-    foreach($topSearched as $city) {
+    foreach ($topSearched as $city) {
         echo "<tr><td>{$city['name']}</td><td>{$city['times_searched']}</td></tr>";
     }
     echo "</tbody>";
@@ -98,3 +109,4 @@ echo "</div>";
 <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+*/

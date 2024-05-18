@@ -1,5 +1,6 @@
 <?php
-class weatherApi {
+namespace Classes;
+class WeatherApi {
     public $apiKey;
     private $apiUrl = 'http://api.openweathermap.org/data/2.5/weather?q=';
     public function __construct($apiKey) {
