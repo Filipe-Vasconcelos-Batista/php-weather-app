@@ -1,4 +1,5 @@
 <?php
+namespace Classes;
 class FormHandler {
     private $database;
 
