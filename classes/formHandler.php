@@ -27,7 +27,7 @@ class FormHandler {
         if($cityId===false){
             $this->database -> addCity($cityName);
         }else{
-            $this->database -> updateCity($cityId);
+            $this->database -> updateCity($cityId['id']);
         }
     }
 }

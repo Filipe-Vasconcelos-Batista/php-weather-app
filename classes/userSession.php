@@ -26,4 +26,15 @@ class UserSession {
     public function getSearchCount() {
         return isset($_COOKIE['search_count']) ? $_COOKIE['search_count'] : 0;
     }
+    public function clear(){
+        if (isset($_SERVER['HTTP_COOKIE'])) {
+            $cookies = explode(';', $_SERVER['HTTP_COOKIE']);
+            foreach($cookies as $cookie) {
+                $parts = explode('=', $cookie);
+                $name = trim($parts[0]);
+                setcookie($name, '', time()-1000);
+                setcookie($name, '', time()-1000, '/');
+            }
+        }
+    }
 }
